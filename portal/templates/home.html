@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <br>
+    {% if user.is_authenticated %}
+        <div class="card">
+            <div class="card-body">
+                <center>
+                    {% if user.is_staff %}
+                        Gestão: &nbsp;
+                        <a href="{% url 'categoria' %}" style="text-decoration:none">Categorias</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'curso' %}" style="text-decoration:none">Cursos</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'aula' %}" style="text-decoration:none">Aulas</a><br>
+                    {% else %}
+                        <a href="{% url 'cursos' %}" style="text-decoration:none">Cursos</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'matricula' %}" style="text-decoration:none">Perfil</a><br>
+                    {% endif %}             
+                </center>
+            </div>
+        </div>
+    {% endif %}  
+
+    {% if messages %}
+        {% for m in messages %}
+        <br>
+        <div class="alert alert-sucess" role="alert">
+            {{ m }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <h3 align="center">&nbsp;&nbsp;&nbsp;&nbsp;Bem vindos ao Portal de Inglês</h3>
+
+{% endblock %}

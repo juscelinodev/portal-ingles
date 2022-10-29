@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class='card'>
+    <div class='card-body'>
+        <h4>Cursos</h4>
+        <hr>
+        {% if messages %}
+        {% for m in messages %}
+        <div class="alert alert-sucess" role="alert">
+            {{ m }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome do Curso</th>
+                    <th>Categoria</th>
+                    <th>Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curso in cursos %}
+                <tr>
+                    <td>{{ curso.nome_curso }}</td>
+                    <td>{{ curso.categoria }}</td>
+                    <td>{{ curso.descricao }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{% url 'curso_edit' curso.id %}">Editar</a>
+                        <a class="btn btn-danger" href="{% url 'curso_delete' curso.id %}"
+                        onclick="return confirm('Confirma a exclusão?')">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <center>
+            <a class="btn btn-success" href="{% url 'curso_add' %}">Cadastrar Curso</a>
+            <a class="btn btn btn-secondary" href="{% url 'home' %}">Página Inicial</a>
+        </center>
+    </div>
+</div>
+
+{% endblock %}

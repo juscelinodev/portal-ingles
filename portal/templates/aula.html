@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class='card'>
+    <div class='card-body'>
+        <h4>Aulas</h4>
+        <hr>
+        {% if messages %}
+        {% for m in messages %}
+        <div class="alert alert-sucess" role="alert">
+            {{ m }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome da Aula</th>
+                    <th>Curso</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aula in aulas %}
+                <tr>
+                    <td>{{ aula.nome_aula }}</td>
+                    <td>{{ aula.curso }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{% url 'aula_edit' aula.id %}">Editar</a>
+                        <a class="btn btn-danger" href="{% url 'aula_delete' aula.id %}"
+                        onclick="return confirm('Confirma a exclusão?')">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <center>
+            <a class="btn btn-success" href="{% url 'aula_add' %}">Cadastrar Aula</a>
+            <a class="btn btn btn-secondary" href="{% url 'home' %}">Página Inicial</a>
+        </center>
+    </div>
+</div>
+
+{% endblock %}

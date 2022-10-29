@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <br>
+
+    {% if messages %}
+        {% for m in messages %}
+        <div class="alert alert-sucess" role="alert">
+            {{ m }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    
+    <br>
+
+    <form action="{% url 'matricula_add' %}" method="POST" style="margin: auto; width: 400px;">{% csrf_token %}
+        <div class="input-group mb-3">
+            <div class="input-group-prepend" width="300">
+                <label class="input-group-text" for="basic-addon1">Curso</label>
+            </div>
+            <select name="curso" class="form-control" id="inputGroupSelect01">
+                <option selected>Clique para selecionar um curso</option>
+                {% for curso in cursos %}
+                <option value="{{ curso.id }}">{{ curso.nome_curso }} - {{ curso.categoria }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <center>
+            <button class="btn btn-success" type="submit">Realizar Matrícula</button>
+            <a href="{% url 'matricula' %}" class="btn btn-danger">Cancelar</a>
+        </center>
+        <br>
+        <br>
+    </form>
+
+{% endblock %}

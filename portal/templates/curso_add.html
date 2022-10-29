@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <br>
+
+    {% if messages %}
+        {% for m in messages %}
+        <div class="alert alert-sucess" role="alert">
+            {{ m }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    
+    <br>
+
+    <form action="{% url 'curso_add' %}" method="POST" enctype="multipart/form-data" style="margin: auto; width: 400px;">{% csrf_token %}
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class='input-group-text' id="basic-addon1">Nome do Curso</span>
+            </div>
+            <input type="text" class="form-control" placeholder="" name="nome_curso">
+        </div>
+        <br>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend" width="300">
+                <label class="input-group-text" for="basic-addon1">Usuário</label>
+            </div>
+            <select name="usuario" class="form-control" id="inputGroupSelect01">
+                <option selected>Clique para selecionar um usuário</option>
+                {% for usuario in usuarios %}
+                <option value="{{ usuario.id }}">{{ usuario.first_name }} {{ usuario.last_name }} ({{ usuario.email }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend" width="300">
+                <label class="input-group-text" for="basic-addon1">Categoria</label>
+            </div>
+            <select name="categoria" class="form-control" id="inputGroupSelect01">
+                <option selected>Clique para selecionar uma categoria</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.nome_categoria }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class='input-group-text' id="basic-addon1">Descrição</span>
+            </div>
+            <input type="text" class="form-control" placeholder="" name="descricao">
+        </div>
+        <br>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class='input-group-text' id="basic-addon1">Thumbnail</span>
+            </div>
+            <input type="file" accept=".jpg, .png" class="form-control" placeholder="" name="thumbnail">
+        </div>
+        <!-- <br>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class='input-group-text' id="basic-addon1">URL do Vídeo</span>
+            </div>
+            <input type="text" class="form-control" placeholder="" name="video_url">
+        </div> -->
+        <center>
+            <button class="btn btn-success" type="submit">Salvar</button>
+            <a href="{% url 'curso' %}" class="btn btn-danger">Cancelar</a>
+        </center>
+        <br>
+        <br>
+    </form>
+
+{% endblock %}

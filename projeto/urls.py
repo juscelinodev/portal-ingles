@@ -50,5 +50,13 @@ urlpatterns = [
     path('aula/add', views.aula_add, name='aula_add'),
     path('aula/edit/<int:aula_pk>', views.aula_edit, name='aula_edit'),
     path('aula/delete/<int:aula_pk>', views.aula_delete, name='aula_delete'),
+    path('meus-cursos/<int:curso_pk>/view', views.IniciarAulaView.as_view(), name='curso-aulas'),
+    path('meus-cursos/<int:curso_pk>/aulas/<int:aula_pk>', views.AulaView.as_view(), name='curso-aulas-um'),
+        # path('', include([
+        # path('my-courses', views.EnrolledCoursesListView.as_view(), name='enrolled-courses'),
+        # path('my-courses/<slug:slug>/view', views.StartLessonView.as_view(), name='course-lessons'),
+        # path('my-courses/<slug:slug>/lessons/<int:id>', views.LessonView.as_view(), name='course-lessons-single'),
+        # path('profile', views.ProfileUpdateView.as_view(), name='my-profile'),
+    # ])),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # para as thumbnails
 

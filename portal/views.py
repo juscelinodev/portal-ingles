@@ -1,7 +1,7 @@
 from asyncio.base_subprocess import BaseSubprocessTransport
 import email
 from pyexpat.errors import messages
-from django.contrib import messages
+from django.contrib import messages, auth
 from re import sub
 from django.shortcuts import render, redirect
 from portal.models import Categoria
@@ -19,7 +19,12 @@ from django.contrib.auth import login as login_django
 from django.contrib.auth import logout as logout_django
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, FormView, RedirectView, ListView, DetailView, UpdateView
 import os
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, Http404
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -342,5 +347,74 @@ def login(request):
 def logout(request):
     logout_django(request)
     return render(request, 'home.html')
+
+
+class IniciarAulaView(DetailView):
+    model = Aula
+    template_name = 'aulas_por_curso.html'
+    context_object_name = 'aula'
+
+    @method_decorator(login_required(login_url=reverse_lazy('login')))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        curso = get_object_or_404(Curso, pk=self.kwargs["curso_pk"])
+        queryset = queryset.filter(curso=curso)
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset[:1].get()
+            url = obj.video_url
+            url = url.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/")
+            obj.video_url = url
+        except queryset.model.DoesNotExist:
+            raise Http404("No %(verbose_name)s found matching the query" %
+                          {'verbose_name': self.model._meta.verbose_name})
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        curso = get_object_or_404(Curso, pk=self.kwargs["curso_pk"])
+        context["aulas"] = self.model.objects.filter(curso=curso)
+        context["curso"] = curso
+        return context
+
+
+class AulaView(DetailView):
+    model = Aula
+    template_name = 'aulas_por_curso.html'
+    context_object_name = 'aula'
+
+    @method_decorator(login_required(login_url=reverse_lazy('login')))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        aula_id = self.kwargs['aula_pk']
+        queryset = queryset.filter(id=aula_id)
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+            url = obj.video_url
+            url = url.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/")
+            obj.video_url = url
+        except queryset.model.DoesNotExist:
+            raise Http404("No %(verbose_name)s found matching the query" %
+                          {'verbose_name': self.model._meta.verbose_name})
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        curso = get_object_or_404(Curso, pk=self.kwargs["curso_pk"])
+        context["aulas"] = self.model.objects.filter(curso=curso)
+        context["curso"] = curso
+        return context
+
     
  

@@ -25,8 +25,8 @@ from django.conf.urls.static import static
 # is running from and sys.path which includes locations such as the package installation directory
 import sys
 # caution: path[0] is reserved for script path (or '' in REPL)
-sys.path.insert(1, 'c:/dev/portal-ingles/portal')
-import views
+# sys.path.insert(1, 'portal-ingles/portal')
+from portal import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
